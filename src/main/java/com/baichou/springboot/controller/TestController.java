@@ -29,12 +29,12 @@ public class TestController {
 
 //没有指定为主数据源.
     @Autowired
-    @Qualifier("defaultDataSource")
+    @Qualifier("primaryDataSource")
     private DataSource dataSource;
 
 
     @Autowired
-    @Qualifier("primaryDataSource")
+    @Qualifier("thirdDataSource")
     private DataSource dataSource1;
 
 
@@ -43,16 +43,14 @@ public class TestController {
     private DataSource dataSource2;
 
 
+    @Autowired
+    @Qualifier("primaryJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
-
     @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        System.out.println("TestController.setJdbcTemplate()");
-        jdbcTemplate.setDataSource(dataSource1);//设置dataSource
-        this.jdbcTemplate = jdbcTemplate;
+    @Qualifier("secondaryJdbcTemplate")
+    private JdbcTemplate jdbcTemplate2;
 
-    }
 
 
     @RequestMapping("/get")

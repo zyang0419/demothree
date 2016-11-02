@@ -2,11 +2,13 @@ package com.baichou.springboot.datasource;/**
  * Created by root on 16-11-2.
  */
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
@@ -20,7 +22,8 @@ import javax.sql.DataSource;
 public class GlobalDataConfiguration {
     @Bean(name="primaryDataSource")
     @Primary
-    @ConfigurationProperties(prefix="datasource.primary")
+    //@Qualifier("primaryDataSource")
+    @ConfigurationProperties(prefix="spring.datasource")
     public DataSource primaryDataSource() {
         System.out.println("-------------------- primaryDataSource init ---------------------");
         return DataSourceBuilder.create().build();
@@ -33,10 +36,21 @@ public class GlobalDataConfiguration {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name="defaultDataSource")
-    @ConfigurationProperties(prefix="spring.datasource")
+    @Bean(name="thirdDataSource")
+    @ConfigurationProperties(prefix="datasource.third")
     public DataSource defaultDataSource() {
         System.out.println("-------------------- primaryDataSource init ---------------------");
         return DataSourceBuilder.create().build();
+    }
+
+
+    @Bean(name = "primaryJdbcTemplate")
+    public JdbcTemplate primaryJdbcTemplate(@Qualifier("primaryDataSource")DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }
+
+    @Bean(name = "secondaryJdbcTemplate")
+    public JdbcTemplate secondaryJdbcTemplate(@Qualifier("secondaryDataSource")DataSource dataSource){
+        return new JdbcTemplate(dataSource);
     }
 }
